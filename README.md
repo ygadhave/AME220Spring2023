@@ -1,12 +1,13 @@
 # AME220Spring2023
-# AME repo for submitting assignments
 
-Student Information:
+## AME repo for submitting assignments
 
-> Name: Yashwant Nitin Gadhave
+### Student Information:
 
-> ASU ID: 1223118286
+* Name: Yashwant Nitin Gadhave
 
-> Major: Computer Science(Sophomore)
+* ASU ID: 1223118286
 
-> Class: AME220(Monday - Wednesday; 12:00pm - 1:15pm)
+* Major: Computer Science(Sophomore)
+
+* Class: AME220(Monday - Wednesday; 12:00pm - 1:15pm)
