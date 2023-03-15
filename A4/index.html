@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Slide show - js</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        #slideContainer {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(255, 255, 255);
+            overflow: hidden;
+            margin:0;
+            padding:0;
+            top: 0;
+            position: absolute;
+            left: 0;
+        }
+
+        .selected{
+                background-color: green;
+                color: white;
+            }
+
+        #numContainer {
+            position:fixed;
+            bottom: 10px;
+            width:80%;
+            left: 10%;
+            text-align: center;
+            /* transform: translateX(-50%); */
+        }
+
+        #numContainer button{
+                border-radius: 50%;
+        }
+
+        body{
+                margin:0;
+                padding:0;
+                overflow: hidden;
+            }
+        
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-repeat: no-repeat;
+            transition: transform 1s, opacity 1s;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            border:none;
+            float:left;
+        }
+
+        #prev {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+        }
+
+        #next {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+    </style>
+</head>
+
+<body onload="start()">
+    <div id="slideContainer"></div>
+    <div id="numContainer"></div>
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
+
+</body>
+<script>
+    var allImages = [];
+    function start() {
+        var hash = window.location.hash.replace('#', '');
+        var hashArr = hash.split(',');
+        var transitionType = hashArr[hashArr.length-1]; // get the last entry in the hash as the transition type
+        allImages = hashArr.slice(0, -1);
+        //allImages = hash.split(',');
+        if (transitionType !== "slide" && transitionType !== "fade") { // if no transition type is specified, default to sliding
+        transitionType = "slide";
+        window.location.hash += ",slide"; // add the default transition type to the hash
+        }
+
+        var markup = "";
+        var markup1 = "";
+        for (var i = 0; i < allImages.length; i++) {
+            var slideId = "slide-" + (i + 1);
+            markup += "<div style='background-image:url(" + allImages[i] + ")' class='slide' id='" +slideId +"'></div>";
+            markup1 += "<button class='button' data-slide='" + (i + 1) + "' onclick='goToSlide(" + (i + 1) + ")'>" + (i + 1) + "</button>";
+            //markup1 += "<button class='button' data-slide='" + (i + 1) + "'>" + (i + 1) + "</button>";
+            //markup1 += "<button class='button' id='btn" + (i+1) + "' onclick='goToSlide(" + (i+1) + ")'>" + (i+1) + "</button>";
+        }
+        document.getElementById('slideContainer').innerHTML = markup;
+        document.getElementById('numContainer').innerHTML = markup1;
+        document.getElementById('prev').addEventListener('click', goPrev);
+        document.getElementById('next').addEventListener('click', goNext);
+        document.querySelector('.button').classList.add('selected');
+        goToSlide(1);
+    }
+
+    function goNext() {
+        var current = parseInt(document.getElementById('slideContainer').className.split('-')[1]);
+        var next = current + 1;
+        if (next > allImages.length) {
+            next = 1;
+        }
+        goToSlide(next);
+    }
+
+    function goPrev() {
+        var current = parseInt(document.getElementById('slideContainer').className.split('-')[1]);
+        var prev = current - 1;
+        if (prev < 1) {
+            prev = allImages.length;
+        }
+        goToSlide(prev);
+    }
+
+    function goToSlide(current) {
+    var slides = document.getElementsByClassName('slide');
+    var transitionType = window.location.hash.split(',').pop();
+    if (transitionType == "slide") { //sliding transition
+    for (var i = 0; i < slides.length; i++) {
+        if (i == current - 1) {
+                slides[i].style.transform = 'translateX(0%)';
+            } else if (i < current - 1) {
+                slides[i].style.transform = 'translateX(-100%)';
+            } else {
+                slides[i].style.transform = 'translateX(100%)';
+            }
+        }
+    } 
+    
+    else if (transitionType == "fade") { // fading transition
+        for (var i = 0; i < slides.length; i++) {
+            if (i == current - 1) {
+                slides[i].style.opacity = '1';
+            } else {
+                slides[i].style.opacity = '0';
+            }
+        }
+    }
+
+    var buttons = document.getElementsByClassName("button");
+    for (var i = 0; i < buttons.length; i++) {
+        if (buttons[i].dataset.slide == current) {
+            buttons[i].className = "button selected";
+        } else {
+            buttons[i].className = "button";
+        }
+    }
+
+    document.getElementById('slideContainer').className = "slide-" + current;
+}
+</script>
+
+</html>
