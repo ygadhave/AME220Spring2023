@@ -87,7 +87,6 @@
         var hashArr = hash.split(',');
         var transitionType = hashArr[hashArr.length - 1]; // get the last entry in the hash as the transition type
         allImages = hashArr.slice(0, -1);
-        //allImages = hash.split(',');
         if (transitionType !== "slide" && transitionType !== "fade") { // if no transition type is specified, default to sliding
             transitionType = "slide";
             window.location.hash += ",slide"; // add the default transition type to the hash
